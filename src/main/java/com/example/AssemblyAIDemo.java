@@ -64,13 +64,17 @@ public final class AssemblyAIDemo {
             String status = transcript.getStatus();
             System.out.println(status);
 
-            if ("completed".equals(status) || "error".equals(status)) {
+            if ("completed".equals(status)) {
+                System.out.println("Transcription completed!\n");
+                System.out.println(transcript.getText());
+                break;
+            }
+            if ("error".equals(status)) {
+                System.out.printf("Error: %s\n", transcript.getError());
                 break;
             }
             Thread.sleep(1000);
         }
 
-        System.out.println("Transcription completed!\n");
-        System.out.println(transcript.getText());
     }
 }
