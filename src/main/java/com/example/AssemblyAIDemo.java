@@ -15,7 +15,8 @@ public final class AssemblyAIDemo {
     private AssemblyAIDemo() {}
 
     /**
-     * Says hello to the world.
+     * Gets transcript for .mp4 file. URL needs argument: ?raw=true .mp4 file on GitHub must be in a
+     * public repository. Writes transcript text to file transcript.txt.
      * 
      * @param args The arguments of the program.
      */
@@ -23,6 +24,7 @@ public final class AssemblyAIDemo {
 
         Transcript transcript = new Transcript();
         transcript.setAudio_url(Constants.AUDIO_URL);
+        // gson for working with JSON
         Gson gson = new Gson();
         String jsonRequest = gson.toJson(transcript);
         // check for correctly formed JSON request
@@ -51,6 +53,8 @@ public final class AssemblyAIDemo {
                 .uri(new URI(Constants.ASSEMBLYAI_URL + "/" + transcript.getId()))
                 .header("Authorization", Constants.API_KEY).build();
 
+        String textData;
+
         while (true) {
             // send the request expecting String response
             HttpResponse<String> getResponse = httpClient.send(getRequest, BodyHandlers.ofString());
@@ -65,8 +69,9 @@ public final class AssemblyAIDemo {
             System.out.println(status);
 
             if ("completed".equals(status)) {
-                System.out.println("Transcription completed!\n");
-                System.out.println(transcript.getText());
+                textData = transcript.getText();
+                TextFileWriter tf = new TextFileWriter(Constants.TRANSCRIPT_FILE, textData);
+                System.out.printf("Transcript text written to file %s\n\n", textData);
                 break;
             }
             if ("error".equals(status)) {
