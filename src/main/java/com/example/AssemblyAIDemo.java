@@ -54,7 +54,7 @@ public final class AssemblyAIDemo {
                 .header("Authorization", Constants.API_KEY).build();
 
         String textData;
-
+        int secondsCount = 0;
         while (true) {
             // send the request expecting String response
             HttpResponse<String> getResponse = httpClient.send(getRequest, BodyHandlers.ofString());
@@ -79,7 +79,10 @@ public final class AssemblyAIDemo {
                 break;
             }
             Thread.sleep(1000);
+            secondsCount++;
         }
+
+        System.out.printf("Processing took %d seconds.\n", secondsCount);
 
     }
 }

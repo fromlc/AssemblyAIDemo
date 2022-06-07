@@ -1,21 +1,23 @@
 package com.example;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 
 public class TextFileWriter {
-    private FileOutputStream fileOS;
+    private BufferedWriter bufferedWriter;
 
     TextFileWriter(String fileName, String textData) {
 
         try {
-            fileOS = new FileOutputStream(new File(fileName));
-            byte[] dataBytes = textData.getBytes();
-            fileOS.write(dataBytes);
-            fileOS.flush();
+            bufferedWriter = new BufferedWriter(new FileWriter(new File(fileName)));
+            bufferedWriter.write(textData);
             System.out.printf("Transcript written to file: %s\n", fileName);
+            if (bufferedWriter != null) {
+                bufferedWriter.close();
+            }
         } catch (FileNotFoundException e) {
             System.out.printf("File not found: %s\n", fileName);
         } catch (IOException e) {
